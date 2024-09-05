@@ -1,0 +1,28 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Camera {
+  createdAt     DateTime       @default(now())
+  id            String         @id @default(cuid())
+  name          String?
+  rtspUrl       String?
+  updatedAt     DateTime       @updatedAt
+  videoSegments VideoSegment[]
+}
+
+model VideoSegment {
+  camera    Camera?   @relation(fields: [cameraId], references: [id])
+  cameraId  String?
+  createdAt DateTime  @default(now())
+  duration  Int?
+  id        String    @id @default(cuid())
+  timestamp DateTime?
+  updatedAt DateTime  @updatedAt
+  videoPath String?
+}
